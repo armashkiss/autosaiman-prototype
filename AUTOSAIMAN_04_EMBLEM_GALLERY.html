@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eeede8">
+  <meta name="description" content="AUTOSAIMAN.KZ — интерактивная концепция магазина автозапчастей с 3D-эмблемами марок.">
+  <title>AUTOSAIMAN.KZ — Emblem Gallery · интерактивный макет</title>
+  <style>
+    :root{
+      --paper:#eeede8;
+      --paper-2:#f8f7f3;
+      --ink:#151513;
+      --muted:#77766f;
+      --line:#cfcec8;
+      --red:#ed1733;
+      --brand:#d9282f;
+      --brand-dark:#68080f;
+      --brand-light:#ff6d70;
+      --max:1440px;
+      --ease:cubic-bezier(.2,.75,.2,1);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Helvetica Neue",sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    button,input{font:inherit}
+    button,a{color:inherit}
+    button{cursor:pointer}
+    a{text-decoration:none}
+    button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--red);outline-offset:4px}
+    .grain{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E")}
+    .shell{max-width:var(--max);margin:auto;padding:0 42px}
+
+    .topbar{height:92px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid var(--line);position:relative;z-index:20}
+    .logo{display:inline-flex;align-items:center;gap:10px;width:max-content;font-weight:900;letter-spacing:-.055em;font-size:20px}
+    .logo-symbol{width:38px;height:38px}
+    .logo strong{font-size:21px}.logo strong span,.logo strong em{font-style:normal;color:var(--red)}
+    .primary-nav{display:flex;align-items:center;gap:30px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .primary-nav a{position:relative;padding:9px 0}
+    .primary-nav a:after{content:"";position:absolute;height:1px;left:0;right:100%;bottom:3px;background:var(--ink);transition:right .25s}
+    .primary-nav a:hover:after{right:0}
+    .header-end{justify-self:end;display:flex;align-items:center;gap:16px}
+    .contact-copy{text-align:right;line-height:1.35}
+    .contact-copy b{display:block;font-size:11px}.contact-copy span{color:var(--muted);font-size:10px}
+    .round-btn{border:1px solid var(--ink);background:transparent;width:43px;height:43px;border-radius:50%;display:grid;place-items:center;font-size:17px;transition:.25s;position:relative}
+    .round-btn:hover{background:var(--ink);color:var(--paper)}
+    .cart-badge{position:absolute;right:-5px;top:-5px;min-width:18px;height:18px;padding:0 4px;border-radius:20px;background:var(--red);color:#fff;display:grid;place-items:center;font-size:9px;font-weight:900;border:2px solid var(--paper)}
+
+    .conceptbar{height:61px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid var(--line);position:relative;z-index:10}
+    .conceptbar>span{font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+    .concept-links{display:flex;gap:5px}
+    .concept-links a{border:1px solid var(--line);border-radius:999px;padding:8px 13px;font-size:10px;font-weight:800;color:var(--muted);transition:.2s;background:rgba(255,255,255,.25)}
+    .concept-links a:hover,.concept-links a.current{background:var(--ink);border-color:var(--ink);color:white}
+    .concept-note{justify-self:end}
+
+    .hero{min-height:820px;position:relative;padding:34px 0 44px;border-bottom:1px solid var(--line)}
+    .hero-grid{display:grid;grid-template-columns:220px 1fr 220px;gap:20px;align-items:start;position:relative;z-index:3}
+    .micro-nav{font-size:11px;font-weight:700;line-height:2.05}
+    .micro-nav a{display:block;width:max-content}.micro-nav a:hover{color:var(--red)}
+    .hero-intro{display:grid;grid-template-columns:auto minmax(220px,370px);gap:15px;justify-content:center;font-size:11px;line-height:1.5}
+    .hero-intro b{font-size:18px;font-weight:400;line-height:1}.hero-intro span{color:var(--muted)}
+    .hero-number{text-align:right;font-size:11px;line-height:1.45}.hero-number b{display:block;font-size:32px;font-weight:300;letter-spacing:-.04em}.hero-number span{color:var(--muted)}
+    .mega-word{position:absolute;z-index:0;top:143px;left:50%;transform:translateX(-50%);width:100vw;text-align:center;font-size:clamp(74px,13vw,200px);font-weight:900;letter-spacing:-.085em;line-height:.78;white-space:nowrap;color:var(--ink);user-select:none}
+    .mega-word i{font-style:normal;color:var(--red)}
+
+    .stage{height:472px;margin-top:25px;position:relative;display:grid;place-items:center;perspective:1200px;z-index:2}
+    .stage:before{content:"";position:absolute;z-index:-2;width:560px;height:230px;top:185px;border-radius:50%;background:radial-gradient(ellipse,rgba(55,31,29,.18),rgba(55,31,29,.05) 43%,transparent 72%);filter:blur(9px);transform:rotateX(65deg)}
+    .halo{position:absolute;width:420px;height:420px;border:1px solid rgba(0,0,0,.11);border-radius:50%;transform:rotateX(65deg) rotateZ(-13deg);animation:orbit 16s linear infinite}
+    .halo:before,.halo:after{content:"";position:absolute;border-radius:50%;background:var(--red);box-shadow:0 0 0 5px var(--paper)}
+    .halo:before{width:8px;height:8px;left:30px;top:80px}.halo:after{width:5px;height:5px;right:41px;bottom:66px}
+    @keyframes orbit{to{transform:rotateX(65deg) rotateZ(347deg)}}
+    .badge-wrap{width:340px;height:340px;display:grid;place-items:center;transform-style:preserve-3d;transition:transform .25s ease-out;will-change:transform}
+    .badge{width:275px;height:275px;border-radius:50%;position:relative;display:grid;place-items:center;transform-style:preserve-3d;background:
+      radial-gradient(circle at 36% 26%,var(--brand-light),transparent 17%),
+      radial-gradient(circle at 50% 48%,var(--brand),var(--brand-dark) 70%);
+      box-shadow:
+        0 2px 0 #2c080b,
+        0 5px 0 #85141c,
+        0 8px 0 #37080a,
+        0 11px 0 #8e161d,
+        0 14px 0 #260607,
+        0 25px 45px rgba(34,10,10,.28),
+        inset 0 0 0 2px rgba(255,255,255,.45),
+        inset 0 0 0 13px rgba(19,0,0,.22),
+        inset 0 0 0 15px rgba(255,255,255,.2),
+        inset -20px -25px 45px rgba(0,0,0,.3),
+        inset 18px 13px 30px rgba(255,255,255,.18);
+      transition:background .45s var(--ease),box-shadow .45s var(--ease)}
+    .badge:before{content:"";position:absolute;inset:24px;border-radius:50%;border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 0 30px rgba(0,0,0,.22)}
+    .badge:after{content:"";position:absolute;left:38px;right:38px;height:16px;bottom:28px;border-radius:50%;background:rgba(0,0,0,.34);filter:blur(13px);transform:translateZ(-12px)}
+    .mark{position:relative;z-index:2;transform:translateZ(28px);color:white;width:180px;height:180px;display:grid;place-items:center;text-align:center;text-shadow:0 3px 8px rgba(0,0,0,.35);transition:.35s var(--ease)}
+    .mark .brand-logo{display:block;width:90px;height:68px;object-fit:contain;margin:0 auto;filter:brightness(0) invert(1) drop-shadow(0 5px 8px rgba(0,0,0,.28));transition:.25s}
+    .mark .brand-name{display:block;font-size:13px;font-weight:800;letter-spacing:.2em;margin-top:17px;text-transform:uppercase}
+    .mark .brand-origin{display:block;font-size:8px;letter-spacing:.28em;opacity:.7;margin-top:6px;text-transform:uppercase}
+    .shine{position:absolute;inset:7px;border-radius:50%;overflow:hidden;transform:translateZ(3px)}
+    .shine:after{content:"";position:absolute;width:45%;height:145%;left:0;top:-35%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:rotate(31deg);animation:shine 5.5s ease-in-out infinite}
+    @keyframes shine{0%,25%{transform:translateX(-150%) rotate(31deg)}70%,100%{transform:translateX(370%) rotate(31deg)}}
+    .drag-note{position:absolute;right:calc(50% - 265px);top:230px;width:115px;font-size:9px;line-height:1.5;color:var(--muted);text-transform:uppercase;letter-spacing:.13em}
+    .drag-note:before{content:"↔";display:block;color:var(--ink);font-size:19px;margin-bottom:7px}
+    .side-caption{position:absolute;left:calc(50% - 550px);bottom:60px;display:flex;gap:12px;align-items:center;max-width:210px;font-size:10px;line-height:1.5;color:var(--muted)}
+    .side-caption i{width:35px;height:35px;background:var(--red);border-radius:50%;display:grid;place-items:center;color:#fff;font-style:normal;flex:none}
+
+    .selector{display:grid;grid-template-columns:140px 1fr 150px;align-items:center;gap:20px;border-top:1px solid var(--line);padding-top:17px;position:relative;z-index:3}
+    .selector-label b{font-size:10px;text-transform:uppercase;letter-spacing:.15em}.selector-label span{display:block;color:var(--muted);font-size:9px;margin-top:5px}
+    .brand-list{display:flex;align-items:center;justify-content:center;gap:8px}
+    .brand-pick{width:54px;height:54px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.35);font-size:10px;font-weight:900;transition:.25s;position:relative;display:grid;place-items:center;padding:11px}
+    .brand-pick img{width:100%;height:100%;object-fit:contain;filter:brightness(0);opacity:.72;transition:.25s}
+    .brand-pick:hover img{opacity:1}
+    .brand-pick:hover{transform:translateY(-3px);border-color:var(--ink)}
+    .brand-pick.active{background:var(--ink);color:white;border-color:var(--ink);transform:scale(1.08)}
+    .brand-pick.active img{filter:brightness(0) invert(1);opacity:1}
+    .brand-pick.active:after{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-12px;width:4px;height:4px;border-radius:50%;background:var(--red)}
+    .brand-count{text-align:right;font-size:10px;color:var(--muted)}.brand-count b{font-size:15px;color:var(--ink)}
+
+    .finder{padding:29px 0 50px;display:grid;grid-template-columns:1fr 2.2fr 1fr;align-items:center;gap:28px}
+    .finder-copy small{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:900}.finder-copy h2{font-size:20px;margin:8px 0 0;letter-spacing:-.035em}
+    .searchbox{height:58px;background:white;border-radius:999px;display:flex;align-items:center;padding:5px 5px 5px 22px;box-shadow:0 13px 28px rgba(21,21,19,.08);border:1px solid rgba(0,0,0,.06)}
+    .searchbox span{font-size:17px;margin-right:12px}.searchbox input{border:0;outline:0;flex:1;min-width:0;font-size:12px;background:transparent}.searchbox button{height:48px;border:0;border-radius:999px;background:var(--red);color:#fff;padding:0 24px;font-size:11px;font-weight:800;transition:.2s}.searchbox button:hover{background:#c90e28;transform:translateX(-2px)}
+    .finder-features{display:flex;gap:18px;justify-content:flex-end}.finder-features div{font-size:9px;line-height:1.45;color:var(--muted)}.finder-features b{display:block;color:var(--ink);font-size:11px;margin-bottom:3px}
+
+    .atelier{background:#111211;color:#f1f0ec;border-radius:30px 30px 0 0;padding:95px 0 110px;position:relative;overflow:hidden}
+    .atelier:before{content:"";position:absolute;width:530px;height:530px;border-radius:50%;border:1px solid rgba(255,255,255,.07);right:-120px;top:-210px;box-shadow:0 0 0 75px rgba(255,255,255,.018),0 0 0 150px rgba(255,255,255,.012)}
+    .section-kicker{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#9e9e96;font-weight:800}
+    .atelier-head{display:grid;grid-template-columns:1.3fr .7fr;gap:80px;align-items:end;margin-bottom:60px}
+    .atelier h2{font-weight:400;font-size:clamp(45px,6.3vw,94px);line-height:.92;letter-spacing:-.065em;margin:18px 0 0;max-width:800px}.atelier h2 em{font-style:normal;color:var(--red)}
+    .atelier-copy{font-size:13px;line-height:1.8;color:#a6a69e;max-width:380px}.atelier-copy b{color:#fff}
+    .categories{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #363632;border-left:1px solid #363632}
+    .category{min-height:330px;padding:28px;border-right:1px solid #363632;border-bottom:1px solid #363632;position:relative;overflow:hidden;background:#151614;transition:.35s}
+    .category:hover{background:#1d1e1b}
+    .cat-index{font-size:10px;color:#85857f}.category h3{font-size:22px;margin:14px 0 5px;letter-spacing:-.035em}.category p{font-size:10px;color:#7f7f79;margin:0}
+    .part-art{height:170px;position:relative;display:grid;place-items:center;margin-top:18px;transition:transform .5s var(--ease)}.category:hover .part-art{transform:scale(1.07) rotate(-2deg)}
+    .disc-art{width:130px;height:130px;border-radius:50%;border:17px solid #777;box-shadow:inset 0 0 0 2px #bbb,0 12px 30px #000;position:relative;background:radial-gradient(circle,#0d0e0d 0 16%,#c8c8c1 17% 27%,#363734 28% 30%,#8b8b85 31% 100%)}
+    .disc-art:after{content:"";position:absolute;width:72px;height:118px;border-radius:12px 32px 32px 12px;background:linear-gradient(135deg,#ff2440,#8d0718);right:-42px;top:5px;box-shadow:-8px 10px 24px #000}
+    .engine-art{width:155px;height:95px;border-radius:19px 28px 16px 16px;background:linear-gradient(145deg,#585954,#161714 60%);box-shadow:0 18px 30px #000;position:relative}
+    .engine-art:before{content:"";position:absolute;left:15px;right:15px;top:-23px;height:50px;border-radius:13px 13px 4px 4px;background:repeating-linear-gradient(90deg,#6f706a 0 11px,#252622 12px 19px)}
+    .engine-art:after{content:"";position:absolute;width:46px;height:46px;border:8px solid #95968f;border-radius:50%;right:-23px;bottom:-17px;background:#222}
+    .shock-art{width:38px;height:160px;background:linear-gradient(90deg,#242522,#aaa,#333);border-radius:10px;transform:rotate(14deg);position:relative;box-shadow:18px 15px 25px #000}
+    .shock-art:before{content:"";position:absolute;width:100px;height:100px;border:12px solid var(--red);border-top-color:#71101d;border-bottom-color:#ff3d51;border-radius:42%;left:-43px;top:25px}
+    .filter-art{width:115px;height:135px;border-radius:10px;background:repeating-linear-gradient(90deg,#4b4c48 0 4px,#dddcd2 5px 9px);border:8px solid #c65b1c;box-shadow:23px 15px 0 -4px #343531,0 18px 30px #000;transform:rotate(-6deg)}
+    .lamp-art{width:190px;height:85px;border:6px solid #4c4d49;border-radius:75% 22% 47% 22%;background:radial-gradient(ellipse at 65% 50%,#fff 0 7%,#93958f 8% 14%,#181918 15% 40%,#545650 41% 55%,#101110 56%);box-shadow:0 18px 30px #000;transform:skewX(-10deg)}
+    .oil-art{width:95px;height:135px;border-radius:13px 13px 20px 20px;background:linear-gradient(105deg,#343532,#0c0d0c 65%);box-shadow:25px 14px 0 -8px #242522,0 18px 30px #000;position:relative}
+    .oil-art:before{content:"A+";position:absolute;inset:37px 12px;background:var(--red);display:grid;place-items:center;font-size:24px;font-weight:900}.oil-art:after{content:"";position:absolute;width:41px;height:27px;background:#242522;border-radius:8px;right:-23px;top:10px}
+    .category button{position:absolute;right:22px;bottom:20px;width:39px;height:39px;border-radius:50%;border:1px solid #464743;color:#fff;background:transparent;transition:.25s}.category:hover button{background:var(--red);border-color:var(--red);transform:rotate(-45deg)}
+
+    .catalog-toolbar{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:-20px 0 28px;padding:18px 0;border-top:1px solid #363632;border-bottom:1px solid #363632}
+    .filter-list{display:flex;gap:7px;flex-wrap:wrap}
+    .filter-btn{border:1px solid #3c3d39;background:transparent;color:#a7a79f;border-radius:999px;padding:10px 15px;font-size:10px;font-weight:800;transition:.2s}
+    .filter-btn:hover,.filter-btn.active{background:#f1f0eb;color:#111;border-color:#f1f0eb}
+    .catalog-result{font-size:10px;color:#8c8c85;white-space:nowrap}.catalog-result b{color:#fff}
+    .product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .product-card{background:#f1f0eb;color:#171715;border-radius:16px;overflow:hidden;position:relative;transition:.35s var(--ease);border:1px solid transparent}
+    .product-card:hover{transform:translateY(-5px);box-shadow:0 24px 55px rgba(0,0,0,.28);border-color:#fff}
+    .product-visual{height:215px;background:linear-gradient(145deg,#f9f8f3,#d9d7d0);display:grid;place-items:center;position:relative;overflow:hidden}
+    .product-visual:after{content:"";position:absolute;left:20%;right:20%;height:28px;bottom:24px;background:rgba(0,0,0,.17);filter:blur(15px);border-radius:50%}
+    .product-visual .part-art{z-index:1;transform:scale(.78);margin:0}.product-card:hover .product-visual .part-art{transform:scale(.84) rotate(-2deg)}
+    .sale{position:absolute;z-index:3;left:14px;top:14px;background:var(--red);color:white;border-radius:999px;padding:6px 9px;font-size:9px;font-weight:900}
+    .wish{position:absolute;z-index:3;right:13px;top:13px;border:1px solid #c8c7c0;background:#fff;width:34px;height:34px;border-radius:50%;font-size:15px}.wish.on{background:var(--red);color:white;border-color:var(--red)}
+    .product-info{padding:19px}
+    .product-meta{display:flex;justify-content:space-between;gap:10px;color:#8b8981;font-size:9px}.stock{color:#29855e;font-weight:800}
+    .product-info h3{font-size:15px;line-height:1.35;min-height:41px;margin:13px 0 7px;letter-spacing:-.02em}.fit{font-size:9px;color:#77766f;min-height:26px;line-height:1.45}
+    .price-row{display:flex;align-items:end;justify-content:space-between;gap:10px;margin-top:17px}.price strong{font-size:19px;letter-spacing:-.04em}.price del{display:block;color:#9a9890;font-size:9px;margin-top:4px}.buy{border:0;border-radius:999px;background:#151513;color:white;padding:12px 15px;font-size:10px;font-weight:900;transition:.2s}.buy:hover{background:var(--red);transform:translateY(-2px)}
+    .brand-result{display:inline-flex;align-items:center;gap:10px}.brand-result img{width:30px;height:24px;object-fit:contain;filter:brightness(0) invert(1)}
+    .cart-lines{margin-top:22px;border-top:1px solid var(--line)}.cart-line{display:grid;grid-template-columns:1fr auto;gap:18px;padding:15px 0;border-bottom:1px solid var(--line);font-size:12px}.cart-line small{display:block;color:var(--muted);margin-top:4px}.cart-total{display:flex;justify-content:space-between;font-size:19px;margin:22px 0;font-weight:900}.checkout{width:100%;border:0;border-radius:999px;padding:15px;background:var(--red);color:#fff;font-size:11px;font-weight:900}
+
+    .service{background:var(--paper-2);padding:95px 0}
+    .service-head{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:45px}.service h2{font-size:clamp(42px,5vw,72px);letter-spacing:-.06em;line-height:.95;margin:14px 0 0;font-weight:400}.service-copy{font-size:13px;line-height:1.8;color:var(--muted);max-width:520px}
+    .service-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+    .service-item{padding:26px;min-height:205px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between}.service-item .icon{font-size:25px;color:var(--red)}.service-item b{font-size:13px}.service-item p{font-size:10px;color:var(--muted);line-height:1.6;margin:7px 0 0}
+
+    .cta-section{background:var(--red);color:white;padding:75px 0}.cta-inner{display:grid;grid-template-columns:1.4fr .6fr;gap:40px;align-items:center}.cta-section h2{font-size:clamp(38px,5vw,73px);letter-spacing:-.06em;line-height:.95;font-weight:400;margin:0}.cta-section p{font-size:12px;line-height:1.7;opacity:.8}.white-btn{border:0;border-radius:999px;background:white;color:var(--ink);padding:17px 23px;font-size:11px;font-weight:900;margin-top:12px}.white-btn:hover{transform:translateY(-2px)}
+    footer{background:#111211;color:white;padding:42px 0}.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:30px}.footer-inner small{color:#85857f;font-size:9px}.footer-nav{display:flex;gap:24px;color:#a5a59e;font-size:10px}
+
+    .toast{position:fixed;z-index:90;right:25px;bottom:25px;background:#111;color:white;padding:15px 19px;border-radius:999px;font-size:11px;box-shadow:0 14px 35px rgba(0,0,0,.25);animation:toast .3s var(--ease)}
+    @keyframes toast{from{opacity:0;transform:translateY(12px)}}
+    .modal-backdrop{position:fixed;inset:0;z-index:80;background:rgba(17,18,17,.45);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px}
+    .modal{width:min(560px,100%);background:var(--paper-2);padding:33px;border-radius:24px;box-shadow:0 30px 90px rgba(0,0,0,.25)}
+    .modal-top{display:flex;justify-content:space-between;align-items:center}.modal-top small{color:var(--red);font-weight:900;letter-spacing:.15em}.modal h2{font-size:34px;letter-spacing:-.05em;margin:28px 0 10px}.modal p{font-size:12px;color:var(--muted);line-height:1.7}.modal-field{display:flex;border-bottom:1px solid var(--ink);margin:26px 0}.modal-field input{border:0;outline:0;background:transparent;flex:1;padding:14px 0}.modal-field button{border:0;background:transparent;font-size:20px}.close{border:1px solid var(--line);background:transparent;width:38px;height:38px;border-radius:50%}
+
+    @media(max-width:1050px){
+      .shell{padding:0 24px}.primary-nav{display:none}.topbar{grid-template-columns:1fr auto}.header-end{grid-column:2}.conceptbar{grid-template-columns:1fr auto}.concept-note{display:none}.hero-grid{grid-template-columns:160px 1fr 130px}.mega-word{top:155px}.drag-note{right:8%;}.side-caption{left:3%}.finder{grid-template-columns:1fr 2fr}.finder-features{display:none}.atelier-head{grid-template-columns:1fr 1fr}.categories{grid-template-columns:repeat(2,1fr)}.product-grid{grid-template-columns:repeat(2,1fr)}.service-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:720px){
+      .shell{padding:0 16px}.topbar{height:74px}.contact-copy{display:none}.logo strong{font-size:17px}.logo-symbol{width:32px;height:32px}.conceptbar{height:auto;padding:12px 0;display:block}.conceptbar>span{display:block;margin-bottom:10px}.conceptbar .concept-note{display:none}.concept-links{overflow:auto;padding-bottom:4px;justify-content:flex-start;scrollbar-width:none}.concept-links::-webkit-scrollbar{display:none}.concept-links a{white-space:nowrap}.hero{min-height:720px;padding-top:23px}.hero-grid{grid-template-columns:1fr auto}.micro-nav{display:none}.hero-intro{justify-content:start;grid-template-columns:25px 1fr;font-size:9px}.hero-intro b{font-size:14px}.hero-number b{font-size:24px}.mega-word{top:150px;font-size:20vw}.stage{height:415px;margin-top:10px}.badge-wrap{width:280px;height:280px}.badge{width:225px;height:225px}.mark{width:150px;height:150px}.mark .brand-logo{width:78px;height:55px}.halo{width:330px;height:330px}.drag-note{display:none}.side-caption{bottom:27px;left:0}.selector{grid-template-columns:1fr auto}.selector-label{display:none}.brand-list{justify-content:flex-start;overflow:auto;padding:5px 4px 16px;scrollbar-width:none}.brand-list::-webkit-scrollbar{display:none}.brand-pick{flex:0 0 46px;width:46px;height:46px}.finder{grid-template-columns:1fr;padding-top:23px}.searchbox{height:54px}.finder-copy{display:none}.atelier{border-radius:20px 20px 0 0;padding:70px 0}.atelier-head,.service-head,.cta-inner{grid-template-columns:1fr;gap:25px}.catalog-toolbar{align-items:flex-start;flex-direction:column;margin-top:0}.filter-list{flex-wrap:nowrap;overflow:auto;width:100%;padding-bottom:5px;scrollbar-width:none}.filter-list::-webkit-scrollbar{display:none}.filter-btn{white-space:nowrap}.product-grid{grid-template-columns:1fr}.product-visual{height:230px}.categories{grid-template-columns:1fr}.category{min-height:280px}.service{padding:70px 0}.service-grid{grid-template-columns:1fr 1fr}.footer-inner{align-items:flex-start;flex-direction:column}.footer-nav{flex-wrap:wrap}
+    }
+    @media(max-width:440px){
+      .hero{min-height:680px}.hero-number{display:none}.hero-grid{display:block}.mega-word{top:137px}.stage{height:390px}.badge{width:200px;height:200px}.badge-wrap{width:245px;height:245px}.mark .symbol{font-size:47px}.selector{grid-template-columns:1fr}.brand-count{display:none}.service-grid{grid-template-columns:1fr}.cta-section h2{font-size:42px}
+    }
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.halo,.shine:after{animation:none}.badge-wrap{transition:none}}
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="shell topbar">
+    <a class="logo" href="#top" aria-label="AUTOSAIMAN.KZ — главная">
+      <svg class="logo-symbol" viewBox="0 0 58 56" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 49 27 5l5 9L13 49Z" fill="currentColor"/><path d="m30 2 11 18h-9l-6-9zM36 26h13l4 6H32l-2-6ZM31 37h23l3 7H35l-4-7ZM37 49h20v5H41z" fill="#ed1733"/><path d="M17 34h20l4 6H13z" fill="currentColor"/><path d="m26 19 11 18h-7l-8-12z" fill="currentColor"/></svg>
+      <strong>AUTO<span>SAIMAN</span><em>.KZ</em></strong>
+    </a>
+    <nav class="primary-nav" aria-label="Главная навигация"><a href="#brands">По марке</a><a href="#catalog">Каталог</a><a href="#catalog">Акции</a><a href="#service">Доставка</a></nav>
+    <div class="header-end"><div class="contact-copy"><b>Подбор запчастей</b><span>По модели, артикулу или VIN</span></div><button class="round-btn" data-open-search aria-label="Открыть поиск">⌕</button><button class="round-btn" data-cart aria-label="Открыть корзину">◴<span class="cart-badge" id="cartCount">0</span></button></div>
+  </header>
+
+  <div class="shell conceptbar" id="top">
+    <span>UX/UI · Четыре концепции AUTOSAIMAN</span>
+    <nav class="concept-links" aria-label="Концепции"><a href="AUTOSAIMAN_01_PREMIUM_DARK.html">01 — Dark</a><a href="AUTOSAIMAN_02_MODERN_LIGHT.html">02 — Light</a><a href="AUTOSAIMAN_03_PERFORMANCE.html">03 — Sport</a><a class="current" href="AUTOSAIMAN_04_EMBLEM_GALLERY.html">04 — Emblem</a></nav>
+    <span class="concept-note">Интерактивный прототип · тестовые данные</span>
+  </div>
+
+  <main>
+    <section class="shell hero" id="brands">
+      <div class="hero-grid">
+        <nav class="micro-nav" aria-label="Разделы"><a href="#brands">Выбрать марку</a><a href="#catalog">Товары</a><a href="#service">Доставка</a></nav>
+        <div class="hero-intro"><b>+</b><span><strong>Магазин запчастей</strong><br>Выберите логотип — сразу<br>откроется каталог марки.</span></div>
+        <div class="hero-number"><b id="brandYear">1937</b><span id="brandCountry">Япония · надёжность<br>в каждой детали</span></div>
+      </div>
+
+      <div class="mega-word" aria-hidden="true">AUTO<i>SAIMAN</i></div>
+
+      <div class="stage" id="stage">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="badge-wrap" id="badgeWrap" role="button" tabindex="0" aria-label="Открыть каталог Toyota">
+          <div class="badge" id="badge"><div class="shine" aria-hidden="true"></div><div class="mark"><div><img class="brand-logo" id="brandSymbol" src="assets/brands/toyota.svg" alt=""><span class="brand-name" id="brandName">Toyota</span><span class="brand-origin" id="brandOrigin">Genuine Parts</span></div></div></div>
+        </div>
+        <div class="drag-note">Наведите для 3D‑эффекта · нажмите для каталога</div>
+        <div class="side-caption"><i>↓</i><span>Нажмите на логотип — покажем запчасти этой марки в наличии.</span></div>
+      </div>
+
+      <div class="selector">
+        <div class="selector-label"><b>Каталог по марке</b><span>Один клик — сразу к товарам</span></div>
+        <div class="brand-list" role="list" aria-label="Марки автомобилей">
+          <button class="brand-pick active" data-brand="toyota" aria-label="Toyota — открыть каталог"><img src="assets/brands/toyota.svg" alt=""></button>
+          <button class="brand-pick" data-brand="bmw" aria-label="BMW — открыть каталог"><img src="assets/brands/bmw.svg" alt=""></button>
+          <button class="brand-pick" data-brand="mercedes" aria-label="Mercedes-Benz — открыть каталог"><img src="assets/brands/mercedesbenz.png" alt=""></button>
+          <button class="brand-pick" data-brand="audi" aria-label="Audi — открыть каталог"><img src="assets/brands/audi.svg" alt=""></button>
+          <button class="brand-pick" data-brand="lexus" aria-label="Lexus — открыть каталог"><img src="assets/brands/lexus.png" alt=""></button>
+          <button class="brand-pick" data-brand="kia" aria-label="Kia — открыть каталог"><img src="assets/brands/kia.svg" alt=""></button>
+          <button class="brand-pick" data-brand="hyundai" aria-label="Hyundai — открыть каталог"><img src="assets/brands/hyundai.svg" alt=""></button>
+        </div>
+        <div class="brand-count"><b id="brandIndex">01 / 07</b><br>марка автомобиля</div>
+      </div>
+    </section>
+
+    <section class="shell finder" aria-label="Поиск запчастей">
+      <div class="finder-copy"><small>Умный каталог</small><h2>Найдите нужную<br>деталь за секунды</h2></div>
+      <form class="searchbox" data-search-form><span aria-hidden="true">⌕</span><input name="q" aria-label="Название детали, артикул или VIN" placeholder="Название детали, артикул или VIN"><button>Найти →</button></form>
+      <div class="finder-features"><div><b>10 000+</b>позиций<br>в каталоге</div><div><b>По Казахстану</b>быстрая<br>доставка</div></div>
+    </section>
+
+    <section class="atelier" id="catalog">
+      <div class="shell">
+        <div class="atelier-head"><div><div class="section-kicker">Интернет‑магазин · в наличии</div><h2>Запчасти для<br><em id="catalogBrand">Toyota.</em></h2></div><p class="atelier-copy"><span class="brand-result"><img id="catalogLogo" src="assets/brands/toyota.svg" alt=""><b id="catalogCaption">Каталог Toyota</b></span><br>Цены и товары демонстрационные. Выберите категорию, добавьте товар в корзину и проверьте сценарий покупки.</p></div>
+        <div class="catalog-toolbar"><div class="filter-list" aria-label="Фильтр категорий"><button class="filter-btn active" data-filter="all">Все товары</button><button class="filter-btn" data-filter="brakes">Тормоза</button><button class="filter-btn" data-filter="engine">Двигатель</button><button class="filter-btn" data-filter="suspension">Подвеска</button><button class="filter-btn" data-filter="filters">Фильтры</button><button class="filter-btn" data-filter="lighting">Оптика</button><button class="filter-btn" data-filter="oils">Масла</button></div><div class="catalog-result">Найдено: <b id="resultCount">6 товаров</b></div></div>
+        <div class="product-grid" id="productGrid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="service" id="service"><div class="shell"><div class="service-head"><div><div class="section-kicker">Условия заказа</div><h2>Покупать<br>просто и понятно.</h2></div><p class="service-copy">В карточке сразу видны цена, совместимость и наличие. Доставка и способ оплаты уточняются при оформлении заказа.</p></div><div class="service-grid"><article class="service-item"><span class="icon">◇</span><div><b>Гарантия совместимости</b><p>Перед заказом проверяем деталь по модели и VIN.</p></div></article><article class="service-item"><span class="icon">▱</span><div><b>Доставка по Казахстану</b><p>Курьером или в пункт выдачи — сроки считаются по городу.</p></div></article><article class="service-item"><span class="icon">₸</span><div><b>Удобная оплата</b><p>Картой онлайн или при получении после подтверждения.</p></div></article><article class="service-item"><span class="icon">↩</span><div><b>Возврат и обмен</b><p>Понятные условия, если товар не подошёл.</p></div></article></div></div></section>
+
+    <section class="cta-section"><div class="shell cta-inner"><h2>Не нашли нужную<br>деталь в каталоге?</h2><div><p>Отправьте VIN или артикул — менеджер проверит поставщиков и предложит цену.</p><button class="white-btn" data-consult>Запросить цену →</button></div></div></section>
+  </main>
+
+  <footer><div class="shell footer-inner"><a class="logo" href="#top"><strong>AUTO<span>SAIMAN</span><em>.KZ</em></strong></a><small>© 2026 AUTOSAIMAN.KZ · Демонстрационный UX/UI‑прототип</small><nav class="footer-nav"><a href="#catalog">Каталог</a><a href="#service">О компании</a><a href="#top">Контакты</a></nav></div></footer>
+
+  <script>
+    (()=>{
+      const brands={
+        toyota:{name:'Toyota',logo:'assets/brands/toyota.svg',origin:'Genuine Parts',year:'1937',model:'Camry / RAV4 / Corolla',country:'Япония · надёжность<br>в каждой детали',colors:['#d9282f','#68080f','#ff6d70']},
+        bmw:{name:'BMW',logo:'assets/brands/bmw.svg',origin:'Freude am Fahren',year:'1916',model:'3 Series / 5 Series / X5',country:'Германия · точность<br>и динамика',colors:['#3475b9','#092c5c','#74c6ff']},
+        mercedes:{name:'Mercedes-Benz',logo:'assets/brands/mercedesbenz.png',origin:'The Best or Nothing',year:'1926',model:'C-Class / E-Class / GLC',country:'Германия · инженерная<br>культура',colors:['#979b9d','#2c3235','#e7ecee']},
+        audi:{name:'Audi',logo:'assets/brands/audi.svg',origin:'Vorsprung',year:'1909',model:'A4 / A6 / Q5',country:'Германия · прогресс<br>через технологии',colors:['#db2238','#650910','#ff7b88']},
+        lexus:{name:'Lexus',logo:'assets/brands/lexus.png',origin:'Experience Amazing',year:'1989',model:'ES / RX / NX',country:'Япония · внимание<br>к каждой линии',colors:['#b8a077','#493a22','#f0dfbb']},
+        kia:{name:'Kia',logo:'assets/brands/kia.svg',origin:'Movement Inspires',year:'1944',model:'Sportage / K5 / Sorento',country:'Корея · движение,<br>которое вдохновляет',colors:['#353837','#0b0d0c','#9ca39f']},
+        hyundai:{name:'Hyundai',logo:'assets/brands/hyundai.svg',origin:'Progress for Humanity',year:'1967',model:'Tucson / Sonata / Elantra',country:'Корея · технологии<br>для человека',colors:['#29609b','#0b2544','#6bb8f2']}
+      };
+      const products=[
+        {id:1,title:'Тормозные колодки передние',cat:'brakes',sku:'BRK-33480',price:24500,old:29900,art:'disc-art'},
+        {id:2,title:'Двигатель в сборе 2.0',cat:'engine',sku:'ENG-20-2828',price:420000,old:465000,art:'engine-art'},
+        {id:3,title:'Амортизатор передний',cat:'suspension',sku:'SHK-54651',price:36500,old:42000,art:'shock-art'},
+        {id:4,title:'Фильтр масляный Premium',cat:'filters',sku:'FLT-YZZE1',price:4200,old:5100,art:'filter-art'},
+        {id:5,title:'Фара передняя LED',cat:'lighting',sku:'LED-484069',price:185000,old:209000,art:'lamp-art'},
+        {id:6,title:'Масло моторное 5W-30, 4 л',cat:'oils',sku:'OIL-5W30-4',price:18900,old:22000,art:'oil-art'}
+      ];
+      const money=n=>new Intl.NumberFormat('ru-RU').format(n)+' ₸';
+      const root=document.documentElement,stage=document.querySelector('#stage'),wrap=document.querySelector('#badgeWrap'),badge=document.querySelector('#badge');
+      const symbol=document.querySelector('#brandSymbol'),name=document.querySelector('#brandName'),origin=document.querySelector('#brandOrigin'),year=document.querySelector('#brandYear'),country=document.querySelector('#brandCountry'),index=document.querySelector('#brandIndex'),grid=document.querySelector('#productGrid');
+      let current='toyota',activeFilter='all',raf=0,cart={};
+      function renderProducts(){
+        const b=brands[current],items=products.filter(p=>activeFilter==='all'||p.cat===activeFilter);
+        document.querySelector('#catalogBrand').textContent=b.name+'.';document.querySelector('#catalogLogo').src=b.logo;document.querySelector('#catalogCaption').textContent='Каталог '+b.name;document.querySelector('#resultCount').textContent=items.length+' '+(items.length===1?'товар':'товаров');
+        grid.innerHTML=items.map(p=>{const key=current+'-'+p.id,discount=Math.round((1-p.price/p.old)*100);return `<article class="product-card"><div class="product-visual"><span class="sale">−${discount}%</span><button class="wish" data-wish="${key}" aria-label="Добавить в избранное">♡</button><div class="part-art"><div class="${p.art}"></div></div></div><div class="product-info"><div class="product-meta"><span>${b.name} · ${p.sku}</span><span class="stock">● В наличии</span></div><h3>${p.title}</h3><div class="fit">Подходит для: ${b.model}</div><div class="price-row"><div class="price"><strong>${money(p.price)}</strong><del>${money(p.old)}</del></div><button class="buy" data-buy="${p.id}">В корзину +</button></div></div></article>`}).join('');
+      }
+      function setBrand(key,openCatalog=false){
+        const b=brands[key];if(!b)return;current=key;activeFilter='all';
+        root.style.setProperty('--brand',b.colors[0]);root.style.setProperty('--brand-dark',b.colors[1]);root.style.setProperty('--brand-light',b.colors[2]);
+        wrap.style.transform='rotateX(7deg) rotateY(0deg) scale(.82)';
+        setTimeout(()=>{symbol.src=b.logo;name.textContent=b.name;origin.textContent=b.origin;year.textContent=b.year;country.innerHTML=b.country;wrap.setAttribute('aria-label','Открыть каталог '+b.name);wrap.style.transform='rotateX(7deg) rotateY(0deg) scale(1)'},160);
+        document.querySelectorAll('.brand-pick').forEach((btn,i)=>{const on=btn.dataset.brand===key;btn.classList.toggle('active',on);if(on)index.textContent=String(i+1).padStart(2,'0')+' / 07'});
+        document.querySelectorAll('.filter-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.filter==='all'));renderProducts();
+        if(openCatalog)setTimeout(()=>document.querySelector('#catalog').scrollIntoView({behavior:'smooth',block:'start'}),220);
+      }
+      document.querySelectorAll('.brand-pick').forEach(btn=>btn.addEventListener('click',()=>setBrand(btn.dataset.brand,true)));
+      wrap.addEventListener('click',()=>document.querySelector('#catalog').scrollIntoView({behavior:'smooth'}));wrap.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();wrap.click()}});
+      stage.addEventListener('pointermove',e=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=stage.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{wrap.style.transform=`rotateX(${7-y*20}deg) rotateY(${x*28}deg) translateY(${y*8}px)`})});
+      stage.addEventListener('pointerleave',()=>{wrap.style.transform='rotateX(7deg) rotateY(0deg)'});
+      function toast(text){document.querySelector('.toast')?.remove();const n=document.createElement('div');n.className='toast';n.textContent=text;document.body.append(n);setTimeout(()=>n.remove(),3000)}
+      function updateCart(){document.querySelector('#cartCount').textContent=Object.values(cart).reduce((s,x)=>s+x.qty,0)}
+      function addCart(id){const p=products.find(x=>x.id===Number(id)),key=current+'-'+id;if(!p)return;cart[key]??={...p,brand:brands[current].name,qty:0};cart[key].qty++;updateCart();toast(p.title+' · добавлено в корзину')}
+      function cartModal(){
+        const items=Object.values(cart),total=items.reduce((s,x)=>s+x.price*x.qty,0),d=document.createElement('div');d.className='modal-backdrop';d.innerHTML=`<section class="modal" role="dialog" aria-modal="true" aria-labelledby="cartTitle"><div class="modal-top"><small>AUTOSAIMAN · КОРЗИНА</small><button class="close" aria-label="Закрыть">×</button></div><h2 id="cartTitle">${items.length?'Ваш заказ':'Корзина пуста'}</h2>${items.length?`<div class="cart-lines">${items.map(x=>`<div class="cart-line"><div><b>${x.title}</b><small>${x.brand} · ${x.qty} шт.</small></div><b>${money(x.price*x.qty)}</b></div>`).join('')}</div><div class="cart-total"><span>Итого</span><span>${money(total)}</span></div><button class="checkout">Перейти к оформлению →</button>`:'<p>Выберите марку, откройте каталог и добавьте нужные запчасти.</p>'}</section>`;document.body.append(d);const close=()=>d.remove();d.querySelector('.close').onclick=close;d.addEventListener('click',e=>{if(e.target===d)close()});d.querySelector('.checkout')?.addEventListener('click',()=>{close();toast('Демо-оформление: заказ не отправлен')});
+      }
+      function searchModal(mode='search'){
+        const d=document.createElement('div');d.className='modal-backdrop';d.innerHTML=`<section class="modal" role="dialog" aria-modal="true" aria-labelledby="dialogTitle"><div class="modal-top"><small>AUTOSAIMAN · ДЕМО</small><button class="close" aria-label="Закрыть">×</button></div><h2 id="dialogTitle">${mode==='consult'?'Подберём нужную деталь':'Поиск по каталогу'}</h2><p>${mode==='consult'?'Укажите автомобиль или VIN. В рабочей версии специалист предложит совместимые оригиналы и аналоги.':'Введите название, артикул или VIN — покажем подходящие позиции для выбранной марки.'}</p><form data-modal-form><div class="modal-field"><input autofocus required placeholder="${mode==='consult'?'Например, Toyota Camry 2020':'Например, тормозные колодки'}"><button aria-label="Отправить">→</button></div></form><p>Это интерактивный прототип: данные никуда не отправляются.</p></section>`;document.body.append(d);const close=()=>d.remove();d.querySelector('.close').onclick=close;d.addEventListener('click',e=>{if(e.target===d)close()});d.querySelector('form').onsubmit=e=>{e.preventDefault();const q=e.target.querySelector('input').value.trim();close();toast(mode==='consult'?'Демо-заявка готова — отправка отключена':'Найдено 24 позиции по запросу «'+q+'»')};document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){close();document.removeEventListener('keydown',esc)}},{once:true});
+      }
+      document.querySelectorAll('[data-open-search]').forEach(b=>b.onclick=()=>searchModal());document.querySelectorAll('[data-consult]').forEach(b=>b.onclick=()=>searchModal('consult'));document.querySelector('[data-cart]').onclick=cartModal;
+      document.querySelector('[data-search-form]').addEventListener('submit',e=>{e.preventDefault();const q=new FormData(e.currentTarget).get('q').trim().toLowerCase();if(!q){searchModal();return}const found=products.find(p=>(p.title+' '+p.sku).toLowerCase().includes(q));document.querySelector('#catalog').scrollIntoView({behavior:'smooth'});toast(found?'Нашли: '+found.title:'Показываем каталог '+brands[current].name)});
+      document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{activeFilter=btn.dataset.filter;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.toggle('active',x===btn));renderProducts()}));
+      grid.addEventListener('click',e=>{const buy=e.target.closest('[data-buy]'),wish=e.target.closest('[data-wish]');if(buy)addCart(buy.dataset.buy);if(wish){wish.classList.toggle('on');wish.textContent=wish.classList.contains('on')?'♥':'♡'}});
+      setBrand(current);updateCart();
+    })();
+  </script>
+</body>
+</html>
